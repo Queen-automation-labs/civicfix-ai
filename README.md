@@ -62,8 +62,6 @@ Never commit your `.env` file, API keys or other secrets. Keep `.env` excluded t
 
 ## AI Tool Disclosure
 
-AI Tool Disclosure
-
 I built CivicFix AI with the help of ChatGPT. ChatGPT helped me plan the project, write and fix Python code, test the application, and prepare the documentation.
 
 I followed the guidance, ran the code, tested the application, and uploaded the project to GitHub.

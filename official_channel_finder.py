@@ -11,9 +11,10 @@ class OfficialChannelFinder:
     def find(self, problem, location):
         """Find relevant official civic complaint channels."""
         query = (
-            f"{location} municipal corporation road pothole repair complaint "
-            "grievance official portal site:gov.in"
-        )
+           f"{location} {problem} complaint grievance "
+           "official portal site:gov.in"
+          )
+
         results = self.serpapi.google_search(query, location)
         organic = results.get("organic_results", [])
         channels = []
@@ -41,6 +42,9 @@ class OfficialChannelFinder:
                 "road construction department",
                 "road repair",
                 "pothole",
+                "garbage",
+                "waste collection",
+                "drainage",
             ])
             if not relevant:
                 continue

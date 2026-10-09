@@ -9,8 +9,10 @@ class CivicResearchEngine:
 
     def research(self, problem, location):
         """Research a civic problem in a specific location."""
-
-        search_query = f"{problem} {location} complaint grievance site:gov.in"
+        search_query = (
+            f'"{location}" road pothole complaint grievance '
+            'municipal corporation official Bihar'
+        )
 
         maps_query = (
             f"government authority department {problem} {location}"

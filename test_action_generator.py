@@ -1,52 +1,72 @@
+
+import unittest
+
 from action_generator import ActionGenerator
 
-problem = "Patna mein mere area ki road mein bade potholes hain"
-location = "Patna, Bihar, India"
 
-authority_result = {
-    "recommended": {
-        "authority": "Local Municipal Authority",
-        "score": 90,
-        "reason": "The problem is commonly handled at the local municipal level."
-    }
-}
+class TestActionGenerator(unittest.TestCase):
 
-google_results = [
-    {
-        "title": "Patna road complaint information",
-        "link": "https://example.com"
-    },
-    {
-        "title": "Municipal road services",
-        "link": "https://example.com"
-    }
-]
+    def setUp(self):
+        self.generator = ActionGenerator()
 
-maps_results = []
-news_results = []
+        self.problem = "Road potholes in my area"
+        self.location = "Patna, Bihar, India"
 
-generator = ActionGenerator()
+        self.authority_result = {
+            "recommended": {
+                "authority": "Local Municipal Authority",
+                "score": 90,
+                "reason": "Commonly handled at the local municipal level."
+            }
+        }
 
-result = generator.generate(
-    problem,
-    location,
-    authority_result,
-    google_results,
-    maps_results,
-    news_results
-)
+        self.google_results = [
+            {
+                "title": "Road complaint information",
+                "link": "https://example.com"
+            }
+        ]
 
-print("\n=== ACTION GENERATOR TEST ===")
-print("Authority:", result["authority"])
-print("Confidence:", result["confidence"], "%")
-print("Reason:", result["reason"])
+    def test_generates_complaint_draft(self):
+        result = self.generator.generate(
+            self.problem,
+            self.location,
+            self.authority_result,
+            self.google_results,
+            [],
+            []
+        )
 
-print("\nComplaint Draft:")
-print(result["complaint_draft"])
+        self.assertIn("complaint_draft", result)
+        self.assertIn(self.problem, result["complaint_draft"])
 
-print("\nNext Action:")
-print(result["next_action"])
+    def test_returns_recommended_authority(self):
+        result = self.generator.generate(
+            self.problem,
+            self.location,
+            self.authority_result,
+            self.google_results,
+            [],
+            []
+        )
 
-print("\nEvidence:")
-for item in result["evidence"]:
-    print("-", item["title"])
+        self.assertEqual(
+            result["authority"],
+            "Local Municipal Authority"
+        )
+
+    def test_returns_preliminary_authority_status(self):
+        result = self.generator.generate(
+            self.problem,
+            self.location,
+            self.authority_result,
+            self.google_results,
+            [],
+            []
+        )
+
+        self.assertIn("not verified", result["authority_status"].lower())
+
+
+if __name__ == "__main__":
+    unittest.main()

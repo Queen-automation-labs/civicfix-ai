@@ -404,8 +404,8 @@ def home():
             next_action=action.get("next_action", "")
         )
 
-    except Exception:
-        app.logger.exception("CivicFix research failed")
+    except Exception as e:
+        app.logger.exception("CivicFix research failed: %s", e)
         return render_template_string(
             """
             <body style="background:#070b14;color:white;font-family:Arial;padding:24px">

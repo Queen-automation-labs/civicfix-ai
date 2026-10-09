@@ -1,38 +1,50 @@
+
+import unittest
+
 from official_source_filter import OfficialSourceFilter
 
-results = [
-    {
-        "title": "Patna Municipal Corporation",
-        "link": "https://pmc.bihar.gov.in/",
-        "snippet": "Official Patna Municipal Corporation website"
-    },
-    {
-        "title": "Patna District Contact",
-        "link": "https://www.indiacustomercare.com/patna-district-all-important-contact-no",
-        "snippet": "Third-party information"
-    },
-    {
-        "title": "Bihar Government",
-        "link": "https://state.bihar.gov.in/",
-        "snippet": "Government of Bihar"
-    },
-    {
-        "title": "Random News",
-        "link": "https://example.com/news",
-        "snippet": "News article"
-    }
-]
 
-filter_engine = OfficialSourceFilter()
+class TestOfficialSourceFilter(unittest.TestCase):
 
-official_results = filter_engine.filter_results(results)
+    def setUp(self):
+        self.filter_engine = OfficialSourceFilter()
 
-print("\n=== OFFICIAL SOURCE FILTER TEST ===")
-print("Total results:", len(results))
-print("Official results:", len(official_results))
+    def test_keeps_official_government_domains(self):
+        results = [
+            {
+                "title": "Patna Municipal Corporation",
+                "link": "https://pmc.bihar.gov.in/",
+                "snippet": "Official website"
+            },
+            {
+                "title": "Bihar Government",
+                "link": "https://state.bihar.gov.in/",
+                "snippet": "Government website"
+            }
+        ]
 
-print("\nOfficial Sources:")
+        filtered = self.filter_engine.filter_results(results)
 
-for item in official_results:
-    print("-", item["title"])
-    print(" ", item["link"])
+        self.assertEqual(len(filtered), 2)
+
+    def test_removes_third_party_domains(self):
+        results = [
+            {
+                "title": "Third-party contact",
+                "link": "https://example.com/contact",
+                "snippet": "Contact information"
+            }
+        ]
+
+        filtered = self.filter_engine.filter_results(results)
+
+        self.assertEqual(len(filtered), 0)
+
+    def test_handles_empty_results(self):
+        filtered = self.filter_engine.filter_results([])
+
+        self.assertEqual(filtered, [])
+
+
+if __name__ == "__main__":
+    unittest.main()

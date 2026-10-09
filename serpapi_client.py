@@ -30,8 +30,7 @@ class SerpApiClient:
         """Find relevant local authorities and offices."""
         return self.client.search({
             "engine": "google_maps",
-            "q": query,
-            "ll": "@25.5941,85.1376,12z",
+            "q": f"{query} {location}",
             "type": "search",
         })
 

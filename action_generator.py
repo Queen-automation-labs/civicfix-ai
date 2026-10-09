@@ -7,7 +7,7 @@ class ActionGenerator:
             "Relevant Local Government Authority"
         )
 
-        score = recommended.get("score", 0)
+        score = recommended.get("score")
 
         reason = recommended.get(
             "reason",
@@ -16,15 +16,36 @@ class ActionGenerator:
 
         evidence = []
 
-        for item in (google_results or [])[:3]:
-            title = item.get("title")
-            link = item.get("link")
+        problem_terms = [
+            word.lower()
+            for word in problem.split()
+            if len(word) > 3
+        ]
 
-            if title:
+        for item in (google_results or []):
+            title = item.get("title", "")
+            link = item.get("link", "")
+            snippet = item.get("snippet", "")
+
+            text = (title + " " + snippet + " " + link).lower()
+
+            official = (
+                ".gov.in" in link.lower()
+                or ".nic.in" in link.lower()
+            )
+
+            relevant = any(
+                term in text for term in problem_terms
+            )
+
+            if title and link and official and relevant:
                 evidence.append({
                     "title": title,
                     "link": link
                 })
+
+            if len(evidence) >= 3:
+                break
 
         complaint = (
             "Subject: Complaint regarding "
@@ -48,6 +69,7 @@ class ActionGenerator:
         return {
             "authority": authority,
             "confidence": score,
+            "authority_status": "Preliminary suggestion — not verified",
             "reason": reason,
             "evidence": evidence,
             "complaint_draft": complaint,

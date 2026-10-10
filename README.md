@@ -62,7 +62,14 @@ Never commit your `.env` file, API keys or other secrets. Keep `.env` excluded t
 
 ## AI Tool Disclosure
 
-AI assistance was used during project development. Update this section to accurately disclose the specific tools used and how they contributed before submission.
+I built CivicFix AI with the help of ChatGPT. ChatGPT helped me plan the project, write and fix Python code, test the application, and prepare the documentation.
+
+I followed the guidance, ran the code, tested the application, and uploaded the project to GitHub.
+
+I used SerpApi to get live results from Google Search, Google Maps, and Google News.
+
+This is a prototype, so some results may need to be checked manually. The project is still being improved.
+
 
 ## Project Status
 

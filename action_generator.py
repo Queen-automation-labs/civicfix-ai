@@ -67,8 +67,8 @@ class ActionGenerator:
         )
 
         return {
-            "authority": authority,
-            "confidence": score,
+            "authority": authority, 
+            "match_score": score,
             "authority_status": "Preliminary suggestion — not verified",
             "reason": reason,
             "evidence": evidence,

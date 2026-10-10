@@ -83,8 +83,8 @@ print("\n=== FINAL RESULT ===")
 print("\nAuthority:")
 print(action["authority"])
 
-print("\nConfidence:")
-print(action["confidence"], "%")
+print("\nMatch score:")
+print(action["match_score"])
 
 print("\nReason:")
 print(action["reason"])

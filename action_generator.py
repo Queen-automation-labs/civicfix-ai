@@ -1,3 +1,4 @@
+import re
 class ActionGenerator:
     def generate(self, problem, location, authority_result, google_results, maps_results, news_results):
         recommended = authority_result.get("recommended", {})
@@ -16,11 +17,26 @@ class ActionGenerator:
 
         evidence = []
 
+        problem_lower = problem.lower()
         problem_terms = [
-            word.lower()
+            word.lower().strip(".,!?;:")
             for word in problem.split()
-            if len(word) > 3
+            if len(word.strip(".,!?;:")) > 3
         ]
+
+        issue_groups = {
+            "pothole": ["pothole", "road", "street", "repair", "construction"],
+            "road": ["road", "street", "pothole", "repair", "construction"],
+            "garbage": ["garbage", "waste", "sanitation", "municipal"],
+            "waste": ["waste", "garbage", "sanitation", "municipal"],
+            "drain": ["drain", "drainage", "sewer", "municipal"],
+            "water": ["water supply", "water", "municipal"],
+            "streetlight": ["streetlight", "street light", "electricity"],
+        }
+        for key, terms in issue_groups.items():
+            if key in problem_lower:
+                problem_terms.extend(terms)
+        problem_terms = list(dict.fromkeys(problem_terms))
 
         for item in (google_results or []):
             title = item.get("title", "")
@@ -46,6 +62,9 @@ class ActionGenerator:
 
             if len(evidence) >= 3:
                 break
+
+        problem = re.sub(r"[.!?]+$", "", problem.strip())
+        location = re.sub(r"[.!?]+$", "", location.strip())
 
         complaint = (
             "Subject: Complaint regarding "

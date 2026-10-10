@@ -3,3 +3,7 @@
 __pycache__/
 *.pyc
 app.py.backup
+
+# Local backup files
+*.py.bak
+*.py.bak*
